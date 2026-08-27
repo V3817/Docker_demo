@@ -1,0 +1,32 @@
+# Use Docker Compose version 3.0
+version: "3.0"
+
+# Define all services that make up your application
+services:
+
+  # ---------------------
+  # Flask Web Application
+  # ---------------------
+  web:
+    # Name of the image to build/run for this service (optional if you're building from Dockerfile)
+    image: web-app
+
+    # Build the image from the Dockerfile in the current directory
+    build: .
+
+    # Map host port 8000 to container port 5000
+    # Flask runs inside the container on port 5000,
+    # but you'll access it from your browser using port 8000
+    ports:
+      - "8000:5000"
+
+    # Ensure Redis starts before the Flask app tries to connect to it
+    depends_on:
+      - redis
+
+  # ----------------
+  # Redis Service
+  # ----------------
+  redis:
+    # Use the official Redis image from Docker Hub
+    image: redis
